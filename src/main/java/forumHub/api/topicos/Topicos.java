@@ -6,6 +6,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Table(name = "topicos")
 @Entity(name = "Topicos")
 @Getter  // gera os metodos getter
@@ -21,12 +24,18 @@ public class Topicos {
 
     private String titulo;
     private String mensagem;
+    @Column(name = "data")
+    private LocalDateTime data;
+    @Enumerated (EnumType.STRING)
+    private Status status;
     private String autor;
     private String curso;
 
     public Topicos(DadosCadastroTopicos dados) {
         this.titulo = dados.titulo();
         this.mensagem=dados.mensagem();
+        this.data = dados.data();
+        this.status = dados.status();
         this.autor=dados.autor();
         this.curso=dados.curso();
     }

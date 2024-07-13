@@ -1,6 +1,11 @@
 package forumHub.api.topicos;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 public record DadosCadastroTopicos(
@@ -10,6 +15,11 @@ public record DadosCadastroTopicos(
         String titulo,
         @NotBlank
         String mensagem,
+        @NotNull
+        @Past
+        LocalDateTime data,
+        @NotNull
+        Status status,
         @NotBlank
         String autor,
         @NotBlank

@@ -1,0 +1,2 @@
+ALTER TABLE topicos ADD COLUMN dataDeCriacao TIMESTAMP NOT NULL;
+
