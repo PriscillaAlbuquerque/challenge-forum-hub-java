@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,22 +22,33 @@ public class TopicosController {
     private TopicoRepository repository;
 
     @PostMapping // verbo POST para inserir dados
-    @Transactional // para usar o metodo insert no banco de dados
-    public void cadastrar (@RequestBody DadosCadastroTopicos dados){ // anotacaoRequestBody indica que o metodo cadastrar vai puxar os dados do corpo da requisição
-        repository.save(new Topicos(dados));
+    @Transactional // para usar o método save no banco de dados
+    public ResponseEntity<Void> cadastrar(@RequestBody DadosCadastroTopicos dados, UriComponentsBuilder uriBuilder) {
+        // Cria a entidade a partir dos dados recebidos
+        Topicos topicos = new Topicos(dados);
 
+        // Salva a entidade no repositório
+        topicos = repository.save(topicos);
+
+        // Constrói a URI para o novo recurso
+        var uri = uriBuilder.path("/topicos/{id}").buildAndExpand(topicos.getId()).toUri();
+
+        // Retorna a resposta com status 201 Created e a URI do novo recurso
+        return ResponseEntity.created(uri).build();
     }
+
 
     //método para fazer a listagem:
 
     //http://localhost:8080/topicos?size=1&page=1 onde size é o tamanho, ou seja, um dado e 1 pagina
     //http://localhost:8080/topicos?sort=data ordenando por data
 
-    @GetMapping //verbo get para listar todos os topicos;
-    public Page<DadosListagemTopicos> listar(@PageableDefault(size = 10, sort = {"curso"}) Pageable paginacao){
-        return repository.findAll(paginacao).map(DadosListagemTopicos::new);
-
+    @GetMapping //verbo get para listar todos os tópicos;
+    public ResponseEntity<Page<DadosListagemTopicos>> listar(@PageableDefault(size = 10, sort = {"curso"}) Pageable paginacao) {
+        Page<DadosListagemTopicos> page = repository.findAll(paginacao).map(DadosListagemTopicos::new);
+        return ResponseEntity.ok(page);
     }
+
 
 
     @GetMapping("/{id}")
@@ -43,18 +56,7 @@ public class TopicosController {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Topico não encontrado"));
     }
 
-//    //@GetMapping("/{id}")
-//    public Topicos listarTopico(@PathVariable Long id) {
-//        var topicos = repository.getReferenceById(id);
-//        return topicos;
-//    }
-//    @PutMapping ("/{id}")// usado para atualizar
-//    @Transactional //usado para o insert, fazer uma escrita no banco.
-//    public void atualizar( @PathVariable Long id, @RequestBody DadosAtualizacaoTopicos dados){
-//        var topicos = repository.getReferenceById(dados.id());
-//        topicos.atualizarInformacoes(dados);
-//
-//
+
 
 
     @PutMapping("/{id}")
@@ -95,7 +97,7 @@ public class TopicosController {
         repository.deleteById(id);
 
         // Retornar uma resposta de sucesso
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build(); // aqui estou usando no content para inidicar que a requisição foi procesada, porém não há conteúdo a ser exibido.
     }
 
 
