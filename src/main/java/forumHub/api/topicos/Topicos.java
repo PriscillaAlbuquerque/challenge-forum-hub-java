@@ -1,5 +1,6 @@
 package forumHub.api.topicos;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "topicos")
 @Entity(name = "Topicos")
 @Getter  // gera os metodos getter
@@ -38,5 +40,18 @@ public class Topicos {
         this.status = dados.status();
         this.autor=dados.autor();
         this.curso=dados.curso();
+    }
+
+    // o spring entende que se eu não colocar o dado no json, ele deve ser nulo, então pra ele entender que não deve ser nulo e que tem que atualizar os campos que eu mandar na requisição, eu preciso colocar essa condição
+    public void atualizarInformacoes(DadosAtualizacaoTopicos dados) {
+        if (dados.titulo() != null){
+            this.titulo = dados.titulo();
+
+        }
+
+        if (dados.mensagem() != null){
+            this.mensagem = dados.mensagem();
+        }
+
     }
 }
