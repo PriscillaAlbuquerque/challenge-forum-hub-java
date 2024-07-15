@@ -1,6 +1,5 @@
-package forumHub.api.topicos;
+package forumHub.api.domain.topicos;
 
-import java.awt.*;
 import java.time.LocalDateTime;
 
 public record DadosListagemTopicos(Long id, String titulo, String mensagem, LocalDateTime data, Status status, String autor, String curso) {

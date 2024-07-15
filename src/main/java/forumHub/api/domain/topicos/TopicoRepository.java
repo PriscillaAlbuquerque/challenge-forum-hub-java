@@ -1,4 +1,4 @@
-package forumHub.api.topicos;
+package forumHub.api.domain.topicos;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

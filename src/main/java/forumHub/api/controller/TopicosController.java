@@ -1,7 +1,10 @@
 package forumHub.api.controller;
 
-import forumHub.api.topicos.*;
+import forumHub.api.domain.topicos.*;
+
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @RestController //indicando para o spring carregar a classe.indica que todos os métodos da classe devem retornar dados diretamente no corpo da resposta HTTP, serializados como JSON.
@@ -23,7 +24,7 @@ public class TopicosController {
 
     @PostMapping // verbo POST para inserir dados
     @Transactional // para usar o método save no banco de dados
-    public ResponseEntity<Void> cadastrar(@RequestBody DadosCadastroTopicos dados, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<Void> cadastrar(@RequestBody @Valid DadosCadastroTopicos dados, UriComponentsBuilder uriBuilder) {
         // Cria a entidade a partir dos dados recebidos
         Topicos topicos = new Topicos(dados);
 
@@ -53,9 +54,8 @@ public class TopicosController {
 
     @GetMapping("/{id}")
     public Topicos listarTopico(@PathVariable Long id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Topico não encontrado"));
+        return repository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
-
 
 
 
