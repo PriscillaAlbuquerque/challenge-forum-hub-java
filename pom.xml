@@ -83,6 +83,11 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>4.2.1</version>
+		</dependency>
 
 
 	</dependencies>
@@ -101,7 +106,16 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>10.10.0</version>
+				<configuration>
+					<url>jdbc:mysql://localhost/forumhub</url>
+					<user>seu_usuario</user>
+					<password>sua_senha</password>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>

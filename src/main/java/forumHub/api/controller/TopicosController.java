@@ -46,6 +46,7 @@ public class TopicosController {
 
     @GetMapping //verbo get para listar todos os tópicos;
     public ResponseEntity<Page<DadosListagemTopicos>> listar(@PageableDefault(size = 10, sort = {"curso"}) Pageable paginacao) {
+
         Page<DadosListagemTopicos> page = repository.findAll(paginacao).map(DadosListagemTopicos::new);
         return ResponseEntity.ok(page);
     }
