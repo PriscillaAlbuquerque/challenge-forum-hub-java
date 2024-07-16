@@ -2,6 +2,7 @@ package forumHub.api.controller;
 
 import forumHub.api.domain.topicos.*;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @RestController //indicando para o spring carregar a classe.indica que todos os métodos da classe devem retornar dados diretamente no corpo da resposta HTTP, serializados como JSON.
 @RequestMapping("topicos") // mapeando a url/topicos
+@SecurityRequirement(name = "bearer-key") // mesma string da classe de configuração do springDoc
 public class TopicosController {
 
     @Autowired
@@ -24,6 +26,7 @@ public class TopicosController {
 
     @PostMapping // verbo POST para inserir dados
     @Transactional // para usar o método save no banco de dados
+
     public ResponseEntity<Void> cadastrar(@RequestBody @Valid DadosCadastroTopicos dados, UriComponentsBuilder uriBuilder) {
         // Cria a entidade a partir dos dados recebidos
         Topicos topicos = new Topicos(dados);
